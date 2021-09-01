@@ -1,0 +1,101 @@
+body {
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+
+}
+
+#game-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+#placement {
+    /* border: 1px solid black; */
+    width: 38.9%;
+    height: 11.3%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    justify-content: center;
+    align-items: center;
+}
+
+.placement-square {
+    /* border: 1px solid black; */
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.circle {
+    height: 95%;
+    width: 95%;  
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+.placement-circle {
+    background-color: white;
+}
+
+.placement-circle-player1:hover {
+    background-color: red;
+
+}
+
+.placement-circle-player2:hover {
+    background-color: blue;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); 
+    height: 70%;
+    width: 39%;
+    /* height: 0;
+    padding-bottom: 30%; */
+    background-color: wheat;
+}
+
+.column {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    height: 100%;
+
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+}
+
+/* Stop overlapping borders */
+.column:not(:first-child) {
+    border-left: none;
+}
+
+.row {
+    /* Only top and bottom, column will handle left and right */
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/* Stop overlapping borders */
+.row:not(:first-child) {
+    border-top: none;
+}
+
+
+
+ .board-circle {
+    background-color: #FFF;
+ }
+
+  
