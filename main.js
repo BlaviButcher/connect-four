@@ -199,6 +199,8 @@ function isHorizontalConnect(columns) {
 }
 
 function reset() {
+    outputText.textContent = "Your turn Player 1!";
+
     for (let col = 0; col < 7; col++) {
         for (let row = 0; row < 6; row++) {
             let targetCell = columns[col].children[row].children[0];
