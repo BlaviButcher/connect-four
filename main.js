@@ -40,7 +40,10 @@ function addToken(column) {
         // Store who owns
         targetCell.children[0].player = isPlayer1Turn ? 1 : 2;
         column.availableSlots--;
-        checkWin(columns);
+        if (checkWin(columns, outputText)) {
+            gameOver();
+            return;
+        }
         changeTurn(placementCircles, outputText);
     }
 }
@@ -64,46 +67,49 @@ function changeTurn(placementCircles, outputText) {
     }
 }
 
-function checkWin(columns) {
+function checkWin(columns, outputText) {
     let win = isVerticalConnect(columns);
     if (win == 1) {
-        console.log("Player 1 wins v");
-        return;
+        console.log("here");
+        outputWinner(win, outputText);
+        return true;
     }
     if (win == 2) {
-        console.log("Player 2 wins v");
-        return;
+        outputWinner(win, outputText);
+        return true;
     }
 
     win = isHorizontalConnect(columns);
     if (win == 1) {
-        console.log("Player 1 wins h");
-        return;
+        outputWinner(win, outputText);
+        return true;
     }
     if (win == 2) {
-        console.log("Player 2 wins h");
-        return;
+        outputWinner(win, outputText);
+        return true;
     }
 
     win = isMainDiagnonalConnect(columns);
     if (win == 1) {
-        console.log("Player 1 wins dm");
-        return;
+        outputWinner(win, outputText);
+        return true;
     }
     if (win == 2) {
-        console.log("Player 2 wins dm");
-        return;
+        outputWinner(win, outputText);
+        return true;
     }
 
     win = isCrossDiagonalConnect(columns);
     if (win == 1) {
-        console.log("Player 1 wins dc");
-        return;
+        outputWinner(win, outputText);
+        return true;
     }
     if (win == 2) {
-        console.log("Player 2 wins dc");
-        return;
+        outputWinner(win, outputText);
+        return true;
     }
+
+    return false;
 
 }
 
@@ -151,6 +157,11 @@ function isMainDiagnonalConnect(columns) {
         }
     }
     return -1;
+}
+
+
+function outputWinner(winner, outputText) {
+    outputText.textContent = `Player ${winner} wins!`;
 }
 
 function isCrossDiagonalConnect(columns) {
@@ -209,6 +220,17 @@ function reset() {
             columns[col].availableSlots = 6;
             isPlayer1Turn = true;
         }
+    }
+}
+
+/**
+ * 
+ * @param {HTMLCollection} placementCircle 
+ */
+function gameOver(placementCircle) {
+    // drop placementCircle click event
+    for (circle of placementCircles) {
+        circle.removeEventListener("click", placementCircleClick);
     }
 }
 
