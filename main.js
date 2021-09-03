@@ -221,6 +221,7 @@ function reset() {
             isPlayer1Turn = true;
         }
     }
+    initialize(placementCircles);
 }
 
 /**
@@ -234,10 +235,14 @@ function gameOver(placementCircle) {
     }
 }
 
+function initialize(placementCircles) {
+    setupPlacementCircles(placementCircles);
+}
+
 
 // ***********    MAIN    *************
 let placementCircles = document.getElementsByClassName("placement-circle");
-setupPlacementCircles(placementCircles);
+
 
 let columns = document.getElementsByClassName("column");
 setupColumns(columns);
@@ -248,4 +253,6 @@ resetButton.addEventListener("click", reset);
 let outputText = document.getElementById("output-text");
 
 let isPlayer1Turn = true;
+
+initialize(placementCircles);
 
