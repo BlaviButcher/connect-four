@@ -41,16 +41,21 @@ function addToken(column) {
         targetCell.children[0].player = isPlayer1Turn ? 1 : 2;
         column.availableSlots--;
         checkWin(columns);
-        changeTurn(placementCircles);
+        changeTurn(placementCircles, outputText);
     }
 }
 
 /**
  * 
  * @param {HTMLCollection} placementCircles 
+ * @param {Element} outputText
  */
-function changeTurn(placementCircles) {
+function changeTurn(placementCircles, outputText) {
     isPlayer1Turn = !isPlayer1Turn;
+
+    let textTurn = isPlayer1Turn ? "Player 1" : "Player 2";
+    outputText.textContent = `Your turn ${textTurn}!`;
+
     let classRemove = isPlayer1Turn ? 'placement-circle-player2' : 'placement-circle-player1';
     let classAdd = isPlayer1Turn ? 'placement-circle-player1' : 'placement-circle-player2';
     for (let circle of placementCircles) {
@@ -215,6 +220,8 @@ setupColumns(columns);
 
 let resetButton = document.getElementById("reset");
 resetButton.addEventListener("click", reset);
+
+let outputText = document.getElementById("output-text");
 
 let isPlayer1Turn = true;
 
