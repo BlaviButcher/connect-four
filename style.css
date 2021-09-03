@@ -2,21 +2,39 @@ body {
     height: 100vh;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex-direction: column;
 
 }
 
+header {
+    text-align: center;
+    flex: 1;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h4 {
+    padding: 0;
+    font-size: 1.5rem;
+}
 #game-screen {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
+    margin-top: 0;
+    flex: 5;
 }
 
 #placement {
     /* border: 1px solid black; */
     width: 38.9%;
-    height: 11.3%;
+    height: 100%;
+    flex: 1;
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     justify-content: center;
@@ -24,7 +42,6 @@ body {
 }
 
 .placement-square {
-    /* border: 1px solid black; */
     height: 100%;
     display: flex;
     justify-content: center;
@@ -55,10 +72,9 @@ body {
 #board {
     display: grid;
     grid-template-columns: repeat(7, 1fr); 
-    height: 70%;
+    height: auto;
     width: 39%;
-    /* height: 0;
-    padding-bottom: 30%; */
+    flex: 6;
     background-color: wheat;
 }
 
@@ -96,6 +112,24 @@ body {
 
  .board-circle {
     background-color: #FFF;
+ }
+
+ footer {
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0.5;
+
+ }
+
+ button {
+     box-shadow: none;
+     border: none;
+     border-radius: 10px;
+     font-size: 1.4rem;
+     height: 3rem;
+     width: 11rem;
  }
 
   
