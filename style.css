@@ -32,7 +32,7 @@ h4 {
 
 #placement {
     /* border: 1px solid black; */
-    width: 38.9%;
+    width: 34%;
     height: 100%;
     flex: 1;
     display: grid;
@@ -73,7 +73,7 @@ h4 {
     display: grid;
     grid-template-columns: repeat(7, 1fr); 
     height: auto;
-    width: 39%;
+    width: 34%;
     flex: 6;
     background-color: wheat;
 }
@@ -124,12 +124,17 @@ h4 {
  }
 
  button {
+     background-color: #dddbdb;
      box-shadow: none;
      border: none;
      border-radius: 10px;
      font-size: 1.4rem;
      height: 3rem;
      width: 11rem;
+ }
+
+ button:hover {
+     background-color: #bebebe;
  }
 
   
