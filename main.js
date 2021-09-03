@@ -40,7 +40,7 @@ function addToken(column) {
         // Store who owns
         targetCell.children[0].player = isPlayer1Turn ? 1 : 2;
         column.availableSlots--;
-        if (checkWin(columns, outputText)) {
+        if (checkWin(columns, outputText, targetCell)) {
             gameOver();
             return;
         }
@@ -67,7 +67,14 @@ function changeTurn(placementCircles, outputText) {
     }
 }
 
-function checkWin(columns, outputText) {
+/**
+ * 
+ * @param {HTMLCollection} columns 
+ * @param {Element} outputText 
+ * @param {Element} targetCell 
+ * @returns 
+ */
+function checkWin(columns, outputText, targetCell) {
     let win = isVerticalConnect(columns);
     if (win == 1) {
         console.log("here");
@@ -79,13 +86,15 @@ function checkWin(columns, outputText) {
         return true;
     }
 
-    win = isHorizontalConnect(columns);
+    win = isHorizontalConnect(columns, targetCell);
     if (win == 1) {
         outputWinner(win, outputText);
+        console.log("h win 1");
         return true;
     }
     if (win == 2) {
         outputWinner(win, outputText);
+        console.log("h win 2");
         return true;
     }
 
@@ -186,7 +195,7 @@ function isCrossDiagonalConnect(columns) {
     return -1;
 }
 
-function isHorizontalConnect(columns) {
+function isHorizontalConnect(columns, targetCell) {
     for (let row = 0; row < 6; row++) {
         let player1Count = 0;
         let player2Count = 0;
@@ -235,8 +244,41 @@ function gameOver(placementCircle) {
     }
 }
 
-function initialize(placementCircles) {
+function initialize(placementCircles, columns) {
     setupPlacementCircles(placementCircles);
+    storeNeighborCells(columns);
+}
+
+function storeNeighborCells(columns) {
+    for (let col = 0; col < 7; col++) {
+        for (let row = 0; row < 6; row++) {
+            let cell = columns[col].children[row];
+            // left
+            if (col > 0) {
+                cell.left = columns[col - 1].children[row];
+                // bottom left
+                if (row < 5) cell.bottomLeft = columns[col - 1].children[row + 1];
+                // top left
+                if (row > 0) cell.topLeft = columns[col - 1].children[row - 1];
+            }
+            // right
+            if (col < 6) {
+                cell.right = columns[col + 1].children[row];
+                // bottom right
+                if (row < 5) cell.bottomRight = columns[col + 1].children[row + 1];
+                // top right
+                if (row > 0) cell.topRight = columns[col + 1].children[row - 1];
+            }
+            // top
+            if (row > 0) {
+                cell.top = columns[col].children[row - 1];
+            }
+            // bottom
+            if (row < 5) {
+                cell.bottom = columns[col].children[row + 1];
+            }
+        }
+    }
 }
 
 
@@ -254,5 +296,4 @@ let outputText = document.getElementById("output-text");
 
 let isPlayer1Turn = true;
 
-initialize(placementCircles);
-
+initialize(placementCircles, columns);
