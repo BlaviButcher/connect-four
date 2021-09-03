@@ -193,6 +193,18 @@ function isHorizontalConnect(columns) {
     return -1;
 }
 
+function reset() {
+    for (let col = 0; col < 7; col++) {
+        for (let row = 0; row < 6; row++) {
+            let targetCell = columns[col].children[row].children[0];
+            targetCell.style.backgroundColor = 'white';
+            targetCell.player = 0;
+            columns[col].availableSlots = 6;
+            isPlayer1Turn = true;
+        }
+    }
+}
+
 
 // ***********    MAIN    *************
 let placementCircles = document.getElementsByClassName("placement-circle");
@@ -200,6 +212,9 @@ setupPlacementCircles(placementCircles);
 
 let columns = document.getElementsByClassName("column");
 setupColumns(columns);
+
+let resetButton = document.getElementById("reset");
+resetButton.addEventListener("click", reset);
 
 let isPlayer1Turn = true;
 
