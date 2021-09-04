@@ -47,20 +47,19 @@ function addToken(column) {
             return;
         }
     }
-    changeTurn(placementCircles, outputText);
+    changeTurn(placementCircles);
 
 }
 
 /**
  * 
  * @param {HTMLCollection} placementCircles 
- * @param {Element} outputText
  */
-function changeTurn(placementCircles, outputText) {
+function changeTurn(placementCircles) {
     isPlayer1Turn = !isPlayer1Turn;
 
     let textTurn = isPlayer1Turn ? "Player 1" : "Player 2";
-    outputText.textContent = `Your turn ${textTurn}!`;
+    document.getElementById("output-text").textContent = `Your turn ${textTurn}!`;
 
     let classRemove = isPlayer1Turn ? 'placement-circle-player2' : 'placement-circle-player1';
     let classAdd = isPlayer1Turn ? 'placement-circle-player1' : 'placement-circle-player2';
@@ -73,7 +72,6 @@ function changeTurn(placementCircles, outputText) {
 /**
  * checks if targetCell has created a connect 4
  * @param {HTMLCollection} columns 
- * @param {Element} outputText 
  * @param {Element} targetCell 
  * @returns 
  */
@@ -152,7 +150,7 @@ function isMainDiagnonalConnect(targetCell) {
 
 
 function outputWinner(winner) {
-    outputText.textContent = `Player ${winner} wins!`;
+    document.getElementById("output-text").textContent = `Player ${winner} wins!`;
 }
 
 function isCrossDiagonalConnect(targetCell) {
@@ -202,7 +200,7 @@ function isHorizontalConnect(targetCell) {
 }
 
 function reset() {
-    outputText.textContent = "Your turn Player 1!";
+    document.getElementById("output-text").textContent = "Your turn Player 1!";
 
     for (let col = 0; col < 7; col++) {
         for (let row = 0; row < 6; row++) {
@@ -280,8 +278,6 @@ setupColumns(columns);
 
 let resetButton = document.getElementById("reset");
 resetButton.addEventListener("click", reset);
-
-let outputText = document.getElementById("output-text");
 
 let isPlayer1Turn = true;
 
