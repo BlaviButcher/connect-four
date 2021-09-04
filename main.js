@@ -41,7 +41,7 @@ function addToken(column) {
         // Store who owns
         targetCell.player = isPlayer1Turn ? 1 : 2;
         column.availableSlots--;
-        checkWin(outputText, targetCell);
+        checkWin(targetCell);
         if (isGameOver) {
             gameOver(placementCircles);
             return;
@@ -71,37 +71,37 @@ function changeTurn(placementCircles, outputText) {
 }
 
 /**
- * 
+ * checks if targetCell has created a connect 4
  * @param {HTMLCollection} columns 
  * @param {Element} outputText 
  * @param {Element} targetCell 
  * @returns 
  */
-function checkWin(outputText, targetCell) {
+function checkWin(targetCell) {
     let winCheckResult = isVerticalConnect(targetCell);
-    handleWinCheckResult(winCheckResult, outputText);
+    handleWinCheckResult(winCheckResult);
 
 
     winCheckResult = isHorizontalConnect(targetCell);
-    handleWinCheckResult(winCheckResult, outputText);
+    handleWinCheckResult(winCheckResult);
 
 
     winCheckResult = isMainDiagnonalConnect(targetCell);
-    handleWinCheckResult(winCheckResult, outputText);
+    handleWinCheckResult(winCheckResult);
 
 
     winCheckResult = isCrossDiagonalConnect(targetCell);
-    handleWinCheckResult(winCheckResult, outputText);
+    handleWinCheckResult(winCheckResult);
 
 }
 
 function handleWinCheckResult(winCheckResult) {
     if (winCheckResult == 1) {
-        outputWinner(winCheckResult, outputText);
+        outputWinner(winCheckResult);
         isGameOver = true;
     }
     else if (winCheckResult == 2) {
-        outputWinner(winCheckResult, outputText);
+        outputWinner(winCheckResult);
         isGameOver = false;
     }
 }
@@ -151,7 +151,7 @@ function isMainDiagnonalConnect(targetCell) {
 }
 
 
-function outputWinner(winner, outputText) {
+function outputWinner(winner) {
     outputText.textContent = `Player ${winner} wins!`;
 }
 
