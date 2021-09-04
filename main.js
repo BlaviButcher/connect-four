@@ -31,16 +31,17 @@ function setupColumns(columns) {
 }
 
 /**
- * adds a token of current players color
+ * adds a token of current players color and stores who clicked in cell
  * @param {Element} column 
  */
 function addToken(column) {
     if (column.availableSlots) {
         let targetCell = column.children[column.availableSlots - 1];
         targetCell.children[0].style.backgroundColor = isPlayer1Turn ? 'red' : 'blue';
-        // Store who owns
+        // Store who clicked
         targetCell.player = isPlayer1Turn ? 1 : 2;
         column.availableSlots--;
+
         checkWin(targetCell);
         if (isGameOver) {
             gameOver(placementCircles);
@@ -58,9 +59,11 @@ function addToken(column) {
 function changeTurn(placementCircles) {
     isPlayer1Turn = !isPlayer1Turn;
 
+    // change text of output
     let textTurn = isPlayer1Turn ? "Player 1" : "Player 2";
     document.getElementById("output-text").textContent = `Your turn ${textTurn}!`;
 
+    // Change visuals of placement circles 
     let classRemove = isPlayer1Turn ? 'placement-circle-player2' : 'placement-circle-player1';
     let classAdd = isPlayer1Turn ? 'placement-circle-player1' : 'placement-circle-player2';
     for (let circle of placementCircles) {
@@ -76,21 +79,11 @@ function changeTurn(placementCircles) {
  * @returns 
  */
 function checkWin(targetCell) {
-    let winCheckResult = isVerticalConnect(targetCell);
-    handleWinCheckResult(winCheckResult);
 
-
-    winCheckResult = isHorizontalConnect(targetCell);
-    handleWinCheckResult(winCheckResult);
-
-
-    winCheckResult = isMainDiagnonalConnect(targetCell);
-    handleWinCheckResult(winCheckResult);
-
-
-    winCheckResult = isCrossDiagonalConnect(targetCell);
-    handleWinCheckResult(winCheckResult);
-
+    for (algorithm of winCheckAlgorithms) {
+        let winCheckResult = algorithm(targetCell);
+        handleWinCheckResult(winCheckResult);
+    }
 }
 
 function handleWinCheckResult(winCheckResult) {
@@ -282,3 +275,5 @@ resetButton.addEventListener("click", reset);
 let isPlayer1Turn = true;
 
 initialize(placementCircles, columns);
+
+let winCheckAlgorithms = [isHorizontalConnect, isVerticalConnect, isMainDiagnonalConnect, isCrossDiagonalConnect];
