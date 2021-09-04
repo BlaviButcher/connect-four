@@ -86,14 +86,21 @@ function checkWin(targetCell) {
     }
 }
 
+/**
+ * 
+ * @param {int} winCheckResult 
+ */
 function handleWinCheckResult(winCheckResult) {
-    if (winCheckResult == 1) {
-        outputWinner(winCheckResult);
-        isGameOver = true;
-    }
-    else if (winCheckResult == 2) {
-        outputWinner(winCheckResult);
-        isGameOver = false;
+
+    switch (winCheckResult) {
+        case 1:
+            outputWinner(winCheckResult);
+            isGameOver = true;
+            break;
+        case 2:
+            outputWinner(winCheckResult);
+            isGameOver = false;
+            break;
     }
 }
 
