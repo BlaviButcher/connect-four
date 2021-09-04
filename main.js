@@ -41,12 +41,14 @@ function addToken(column) {
         // Store who owns
         targetCell.player = isPlayer1Turn ? 1 : 2;
         column.availableSlots--;
-        if (checkWin(columns, outputText, targetCell)) {
-            gameOver();
+        checkWin(outputText, targetCell);
+        if (isGameOver) {
+            gameOver(placementCircles);
             return;
         }
-        changeTurn(placementCircles, outputText);
     }
+    changeTurn(placementCircles, outputText);
+
 }
 
 /**
@@ -75,51 +77,33 @@ function changeTurn(placementCircles, outputText) {
  * @param {Element} targetCell 
  * @returns 
  */
-function checkWin(columns, outputText, targetCell) {
-    let win = isVerticalConnect(targetCell);
-    if (win == 1) {
-        outputWinner(win, outputText);
-        return true;
-    }
-    if (win == 2) {
-        outputWinner(win, outputText);
-        return true;
-    }
+function checkWin(outputText, targetCell) {
+    let winCheckResult = isVerticalConnect(targetCell);
+    handleWinCheckResult(winCheckResult, outputText);
 
-    win = isHorizontalConnect(targetCell);
-    if (win == 1) {
-        outputWinner(win, outputText);
-        console.log("h win 1");
-        return true;
-    }
-    if (win == 2) {
-        outputWinner(win, outputText);
-        console.log("h win 2");
-        return true;
-    }
 
-    win = isMainDiagnonalConnect(targetCell);
-    if (win == 1) {
-        outputWinner(win, outputText);
-        return true;
-    }
-    if (win == 2) {
-        outputWinner(win, outputText);
-        return true;
-    }
+    winCheckResult = isHorizontalConnect(targetCell);
+    handleWinCheckResult(winCheckResult, outputText);
 
-    win = isCrossDiagonalConnect(targetCell);
-    if (win == 1) {
-        outputWinner(win, outputText);
-        return true;
-    }
-    if (win == 2) {
-        outputWinner(win, outputText);
-        return true;
-    }
 
-    return false;
+    winCheckResult = isMainDiagnonalConnect(targetCell);
+    handleWinCheckResult(winCheckResult, outputText);
 
+
+    winCheckResult = isCrossDiagonalConnect(targetCell);
+    handleWinCheckResult(winCheckResult, outputText);
+
+}
+
+function handleWinCheckResult(winCheckResult) {
+    if (winCheckResult == 1) {
+        outputWinner(winCheckResult, outputText);
+        isGameOver = true;
+    }
+    else if (winCheckResult == 2) {
+        outputWinner(winCheckResult, outputText);
+        isGameOver = false;
+    }
 }
 
 //TODO: refactor isVerticalConnect
@@ -136,7 +120,6 @@ function isVerticalConnect(targetCell) {
         count++;
     }
     targetCell = orginalCell;
-    console.log(`bottom: ${targetCell.bottom}`);
     while (targetCell.bottom && targetCell.bottom.player == player) {
 
         targetCell = targetCell.bottom;
@@ -237,7 +220,7 @@ function reset() {
  * 
  * @param {HTMLCollection} placementCircle 
  */
-function gameOver(placementCircle) {
+function gameOver(placementCircles) {
     // drop placementCircle click event
     for (circle of placementCircles) {
         circle.removeEventListener("click", placementCircleClick);
@@ -247,6 +230,7 @@ function gameOver(placementCircle) {
 function initialize(placementCircles, columns) {
     setupPlacementCircles(placementCircles);
     storeNeighborCells(columns);
+    isGameOver = false;
 }
 
 /**
@@ -289,6 +273,7 @@ function storeNeighborCells(columns) {
 // ***********    MAIN    *************
 let placementCircles = document.getElementsByClassName("placement-circle");
 
+let isGameOver;
 
 let columns = document.getElementsByClassName("column");
 setupColumns(columns);
