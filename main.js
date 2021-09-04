@@ -1,8 +1,8 @@
 // TODO: FiraCode
-// TODO: Stop handling the inner circle for properties and just use outer cell
+// TODO: Fix game over being called before placement token changes
 
 /**
- * 
+ * Add click events to all circles in array
  * @param {HTMLCollection} placementCircles 
  */
 function setupPlacementCircles(placementCircles) {
@@ -13,7 +13,7 @@ function setupPlacementCircles(placementCircles) {
 }
 
 /**
- * 
+ * call wrapper for addToken (for growth)
  * @param {Element} caller 
  */
 function placementCircleClick(placementCircle) {
@@ -21,7 +21,7 @@ function placementCircleClick(placementCircle) {
 }
 
 /**
- * 
+ * initalizes all columns 
  * @param {HTMLCollection} columns 
  */
 function setupColumns(columns) {
@@ -31,7 +31,7 @@ function setupColumns(columns) {
 }
 
 /**
- * 
+ * adds a token of current players color
  * @param {Element} column 
  */
 function addToken(column) {
@@ -39,7 +39,7 @@ function addToken(column) {
         let targetCell = column.children[column.availableSlots - 1];
         targetCell.children[0].style.backgroundColor = isPlayer1Turn ? 'red' : 'blue';
         // Store who owns
-        targetCell.children[0].player = isPlayer1Turn ? 1 : 2;
+        targetCell.player = isPlayer1Turn ? 1 : 2;
         column.availableSlots--;
         if (checkWin(columns, outputText, targetCell)) {
             gameOver();
@@ -125,19 +125,19 @@ function checkWin(columns, outputText, targetCell) {
 //TODO: refactor isVerticalConnect
 function isVerticalConnect(targetCell) {
     // who played the token
-    let player = targetCell.children[0].player;
+    let player = targetCell.player;
     let orginalCell = targetCell;
 
     let count = 1;
 
-    while (targetCell.top && targetCell.top.children[0].player == player) {
+    while (targetCell.top && targetCell.top.player == player) {
 
         targetCell = targetCell.top;
         count++;
     }
     targetCell = orginalCell;
     console.log(`bottom: ${targetCell.bottom}`);
-    while (targetCell.bottom && targetCell.bottom.children[0].player == player) {
+    while (targetCell.bottom && targetCell.bottom.player == player) {
 
         targetCell = targetCell.bottom;
         count++;
@@ -147,40 +147,18 @@ function isVerticalConnect(targetCell) {
     return -1;
 }
 
-function misMainDiagnonalConnect(columns) {
-    for (let col = 0; col < 7; col++) {
-        for (let row = 0; row < 6; row++) {
-            if (row + 3 >= 6 || col + 3 >= 7) continue;
-            if (columns[col].children[row].children[0].player == 1
-                && columns[col + 1].children[row + 1].children[0].player == 1
-                && columns[col + 2].children[row + 2].children[0].player == 1
-                && columns[col + 3].children[row + 3].children[0].player == 1) {
-
-                return 1;
-            } else if (columns[col].children[row].children[0].player == 2
-                && columns[col + 1].children[row + 1].children[0].player == 2
-                && columns[col + 2].children[row + 2].children[0].player == 2
-                && columns[col + 3].children[row + 3].children[0].player == 2) {
-
-                return 2;
-            }
-        }
-    }
-    return -1;
-}
-
 function isMainDiagnonalConnect(targetCell) {
-    let player = targetCell.children[0].player;
+    let player = targetCell.player;
     let originalCell = targetCell;
 
     let count = 1;
-    while (targetCell.topLeft && targetCell.topLeft.children[0].player == player) {
+    while (targetCell.topLeft && targetCell.topLeft.player == player) {
         targetCell = targetCell.topLeft;
         count++;
     }
 
     targetCell = originalCell;
-    while (targetCell.bottomRight && targetCell.bottomRight.children[0].player == player) {
+    while (targetCell.bottomRight && targetCell.bottomRight.player == player) {
         targetCell = targetCell.bottomRight;
         count++;
     }
@@ -195,17 +173,17 @@ function outputWinner(winner, outputText) {
 }
 
 function isCrossDiagonalConnect(targetCell) {
-    let player = targetCell.children[0].player;
+    let player = targetCell.player;
     let originalCell = targetCell;
 
     let count = 1;
-    while (targetCell.topRight && targetCell.topRight.children[0].player == player) {
+    while (targetCell.topRight && targetCell.topRight.player == player) {
         targetCell = targetCell.topRight;
         count++;
     }
 
     targetCell = originalCell;
-    while (targetCell.bottomLeft && targetCell.bottomLeft.children[0].player == player) {
+    while (targetCell.bottomLeft && targetCell.bottomLeft.player == player) {
         targetCell = targetCell.bottomLeft;
         count++;
     }
@@ -220,17 +198,17 @@ function isCrossDiagonalConnect(targetCell) {
  */
 function isHorizontalConnect(targetCell) {
     // who played the token
-    let player = targetCell.children[0].player;
+    let player = targetCell.player;
     let orginalCell = targetCell;
 
     let count = 1;
-    while (targetCell.left && targetCell.left.children[0].player == player) {
+    while (targetCell.left && targetCell.left.player == player) {
         targetCell = targetCell.left;
         count++;
     }
 
     targetCell = orginalCell;
-    while (targetCell.right && targetCell.right.children[0].player == player) {
+    while (targetCell.right && targetCell.right.player == player) {
         targetCell = targetCell.right;
 
         count++;
