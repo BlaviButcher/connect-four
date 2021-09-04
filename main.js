@@ -1,5 +1,3 @@
-// TODO: Make algorithm check from last click
-// TODO: Same app 10 times fireship
 // TODO: FiraCode
 // TODO: Stop handling the inner circle for properties and just use outer cell
 
