@@ -78,9 +78,8 @@ function changeTurn(placementCircles, outputText) {
  * @returns 
  */
 function checkWin(columns, outputText, targetCell) {
-    let win = isVerticalConnect(columns);
+    let win = isVerticalConnect(targetCell);
     if (win == 1) {
-        console.log("here");
         outputWinner(win, outputText);
         return true;
     }
@@ -89,7 +88,7 @@ function checkWin(columns, outputText, targetCell) {
         return true;
     }
 
-    win = isHorizontalConnect(columns, targetCell);
+    win = isHorizontalConnect(targetCell);
     if (win == 1) {
         outputWinner(win, outputText);
         console.log("h win 1");
@@ -126,26 +125,27 @@ function checkWin(columns, outputText, targetCell) {
 }
 
 //TODO: refactor isVerticalConnect
-function isVerticalConnect(columns) {
-    for (let col = 0; col < 7; col++) {
-        let player1Count = 0;
-        let player2Count = 0;
-        for (let row = 0; row < 6; row++) {
-            if (columns[col].children[row].children[0].player == 1) {
-                player1Count++;
-                player2Count = 0;
-            } else if (columns[col].children[row].children[0].player == 2) {
-                player2Count++;
-                player1Count = 0;
-            }
-            else {
-                player1Count = 0;
-                player2Count = 0;
-            }
-            if (player1Count == 4) return 1;
-            if (player2Count == 4) return 2;
-        }
+function isVerticalConnect(targetCell) {
+    // who played the token
+    let player = targetCell.children[0].player;
+    let orginalCell = targetCell;
+
+    let count = 1;
+
+    while (targetCell.top && targetCell.top.children[0].player == player) {
+
+        targetCell = targetCell.top;
+        count++;
     }
+    targetCell = orginalCell;
+    console.log(`bottom: ${targetCell.bottom}`);
+    while (targetCell.bottom && targetCell.bottom.children[0].player == player) {
+
+        targetCell = targetCell.bottom;
+        count++;
+    }
+
+    if (count >= 4) return player;
     return -1;
 }
 
@@ -202,7 +202,7 @@ function isCrossDiagonalConnect(columns) {
  * 
  * @param {Element} targetCell 
  */
-function isHorizontalConnect(columns, targetCell) {
+function isHorizontalConnect(targetCell) {
     // who played the token
     let player = targetCell.children[0].player;
     let orginalCell = targetCell;
