@@ -198,30 +198,6 @@ function isCrossDiagonalConnect(columns) {
     return -1;
 }
 
-function misHorizontalConnect(columns, targetCell) {
-
-    for (let row = 0; row < 6; row++) {
-        let player1Count = 0;
-        let player2Count = 0;
-        for (let col = 0; col < 7; col++) {
-            if (columns[col].children[row].children[0].player == 1) {
-                player1Count++;
-                player2Count = 0;
-            } else if (columns[col].children[row].children[0].player == 2) {
-                player2Count++;
-                player1Count = 0;
-            }
-            else {
-                player1Count = 0;
-                player2Count = 0;
-            }
-            if (player1Count == 4) return 1;
-            if (player2Count == 4) return 2;
-        }
-    }
-    return -1;
-}
-
 /**
  * 
  * @param {Element} targetCell 
