@@ -100,7 +100,7 @@ function checkWin(columns, outputText, targetCell) {
         return true;
     }
 
-    win = isMainDiagnonalConnect(columns);
+    win = isMainDiagnonalConnect(targetCell);
     if (win == 1) {
         outputWinner(win, outputText);
         return true;
@@ -110,7 +110,7 @@ function checkWin(columns, outputText, targetCell) {
         return true;
     }
 
-    win = isCrossDiagonalConnect(columns);
+    win = isCrossDiagonalConnect(targetCell);
     if (win == 1) {
         outputWinner(win, outputText);
         return true;
@@ -149,7 +149,7 @@ function isVerticalConnect(targetCell) {
     return -1;
 }
 
-function isMainDiagnonalConnect(columns) {
+function misMainDiagnonalConnect(columns) {
     for (let col = 0; col < 7; col++) {
         for (let row = 0; row < 6; row++) {
             if (row + 3 >= 6 || col + 3 >= 7) continue;
@@ -171,30 +171,48 @@ function isMainDiagnonalConnect(columns) {
     return -1;
 }
 
+function isMainDiagnonalConnect(targetCell) {
+    let player = targetCell.children[0].player;
+    let originalCell = targetCell;
+
+    let count = 1;
+    while (targetCell.topLeft && targetCell.topLeft.children[0].player == player) {
+        targetCell = targetCell.topLeft;
+        count++;
+    }
+
+    targetCell = originalCell;
+    while (targetCell.bottomRight && targetCell.bottomRight.children[0].player == player) {
+        targetCell = targetCell.bottomRight;
+        count++;
+    }
+
+    if (count >= 4) return player;
+    return -1;
+}
+
 
 function outputWinner(winner, outputText) {
     outputText.textContent = `Player ${winner} wins!`;
 }
 
-function isCrossDiagonalConnect(columns) {
-    for (let col = 0; col < 7; col++) {
-        for (let row = 0; row < 6; row++) {
-            if (row - 3 < 0 || col + 3 >= 7) continue;
-            if (columns[col].children[row].children[0].player == 1
-                && columns[col + 1].children[row - 1].children[0].player == 1
-                && columns[col + 2].children[row - 2].children[0].player == 1
-                && columns[col + 3].children[row - 3].children[0].player == 1) {
+function isCrossDiagonalConnect(targetCell) {
+    let player = targetCell.children[0].player;
+    let originalCell = targetCell;
 
-                return 1;
-            } else if (columns[col].children[row].children[0].player == 2
-                && columns[col + 1].children[row - 1].children[0].player == 2
-                && columns[col + 2].children[row - 2].children[0].player == 2
-                && columns[col + 3].children[row - 3].children[0].player == 2) {
-
-                return 2;
-            }
-        }
+    let count = 1;
+    while (targetCell.topRight && targetCell.topRight.children[0].player == player) {
+        targetCell = targetCell.topRight;
+        count++;
     }
+
+    targetCell = originalCell;
+    while (targetCell.bottomLeft && targetCell.bottomLeft.children[0].player == player) {
+        targetCell = targetCell.bottomLeft;
+        count++;
+    }
+
+    if (count >= 4) return player;
     return -1;
 }
 
@@ -211,15 +229,13 @@ function isHorizontalConnect(targetCell) {
     while (targetCell.left && targetCell.left.children[0].player == player) {
         targetCell = targetCell.left;
         count++;
-        console.log(count);
     }
+
     targetCell = orginalCell;
     while (targetCell.right && targetCell.right.children[0].player == player) {
         targetCell = targetCell.right;
 
         count++;
-        console.log(count);
-
     }
 
     if (count >= 4) return player;
