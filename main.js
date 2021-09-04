@@ -1,6 +1,7 @@
 // TODO: Make algorithm check from last click
 // TODO: Same app 10 times fireship
 // TODO: FiraCode
+// TODO: Stop handling the inner circle for properties and just use outer cell
 
 /**
  * 
@@ -197,7 +198,8 @@ function isCrossDiagonalConnect(columns) {
     return -1;
 }
 
-function isHorizontalConnect(columns, targetCell) {
+function misHorizontalConnect(columns, targetCell) {
+
     for (let row = 0; row < 6; row++) {
         let player1Count = 0;
         let player2Count = 0;
@@ -217,6 +219,34 @@ function isHorizontalConnect(columns, targetCell) {
             if (player2Count == 4) return 2;
         }
     }
+    return -1;
+}
+
+/**
+ * 
+ * @param {Element} targetCell 
+ */
+function isHorizontalConnect(columns, targetCell) {
+    // who played the token
+    let player = targetCell.children[0].player;
+    let orginalCell = targetCell;
+
+    let count = 1;
+    while (targetCell.left && targetCell.left.children[0].player == player) {
+        targetCell = targetCell.left;
+        count++;
+        console.log(count);
+    }
+    targetCell = orginalCell;
+    while (targetCell.right && targetCell.right.children[0].player == player) {
+        targetCell = targetCell.right;
+
+        count++;
+        console.log(count);
+
+    }
+
+    if (count >= 4) return player;
     return -1;
 }
 
@@ -251,6 +281,10 @@ function initialize(placementCircles, columns) {
     storeNeighborCells(columns);
 }
 
+/**
+ * Adds neighboring cells as properties of cell
+ * @param {HTMLCollection} columns 
+ */
 function storeNeighborCells(columns) {
     for (let col = 0; col < 7; col++) {
         for (let row = 0; row < 6; row++) {
