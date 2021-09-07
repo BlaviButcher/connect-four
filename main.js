@@ -51,7 +51,7 @@ function drawGameBoard() {
 }
 
 /**
- * Add click events to all circles in array
+ * Add click events to all placementCircles and stores their index
  * @param {HTMLCollection} placementCircles 
  */
 function setupPlacementCircles(placementCircles) {
@@ -62,11 +62,34 @@ function setupPlacementCircles(placementCircles) {
 }
 
 /**
- * call wrapper for addToken (for growth)
+ * call wrapper for addToken
  * @param {Element} caller 
  */
 function placementCircleClick(placementCircle) {
     addToken(columns[placementCircle.target.index]);
+
+}
+
+/**
+ * adds a token of current players color and stores who clicked in cell
+ * @param {Element} column 
+ */
+function addToken(column) {
+    if (column.availableSlots) {
+        // grab row and change color
+        let targetCell = column.children[column.availableSlots - 1];
+        targetCell.children[0].style.backgroundColor = isPlayer1Turn ? PLAYER1_COLOR : PLAYER2_COLOR;
+        // store who owns
+        targetCell.player = isPlayer1Turn ? PLAYER1 : PLAYER2;
+        column.availableSlots--;
+
+        checkWin(targetCell);
+        if (isGameOver) {
+            gameOver(placementCircles);
+            return;
+        }
+    }
+    changeTurn(placementCircles);
 
 }
 
@@ -80,28 +103,7 @@ function setupColumns(columns) {
     };
 }
 
-/**
- * adds a token of current players color and stores who clicked in cell
- * @param {Element} column 
- */
-function addToken(column) {
-    if (column.availableSlots) {
-        // grab row and change color
-        let targetCell = column.children[column.availableSlots - 1];
-        targetCell.children[0].style.backgroundColor = isPlayer1Turn ? 'red' : 'blue';
-        // Store who clicked
-        targetCell.player = isPlayer1Turn ? PLAYER1 : PLAYER2;
-        column.availableSlots--;
 
-        checkWin(targetCell);
-        if (isGameOver) {
-            gameOver(placementCircles);
-            return;
-        }
-    }
-    changeTurn(placementCircles);
-
-}
 
 
 function changePlacementCircleColor(placementCircles) {
@@ -329,23 +331,25 @@ function storeNeighborCells(columns) {
 
 
 // ***********    MAIN    *************
+
 drawGameBoard();
+
 const PLAYER1 = 1;
 const PLAYER2 = 2;
 const NOPLAYER = 0;
-
-let placementCircles = document.getElementsByClassName("placement-circle");
+const PLAYER1_COLOR = 'red';
+const PLAYER2_COLOR = 'blue';
 
 let isGameOver;
+let isPlayer1Turn;
 
+let winCheckAlgorithms = [isHorizontalConnect, isVerticalConnect, isMainDiagnonalConnect, isCrossDiagonalConnect];
+
+let placementCircles = document.getElementsByClassName("placement-circle");
 let columns = document.getElementsByClassName("column");
-setupColumns(columns);
-
 let resetButton = document.getElementById("reset");
 resetButton.addEventListener("click", reset);
 
-let isPlayer1Turn = true;
-
+setupColumns(columns);
 initialize(placementCircles, columns);
 
-let winCheckAlgorithms = [isHorizontalConnect, isVerticalConnect, isMainDiagnonalConnect, isCrossDiagonalConnect];
