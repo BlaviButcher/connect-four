@@ -1,5 +1,55 @@
-// TODO: FiraCode
 // TODO: Fix game over being called before placement token changes
+// TODO: Create html using js
+
+
+
+function drawGameBoard() {
+    let frag = document.createDocumentFragment();
+
+
+
+    let placementArea = document.createElement("div");
+    placementArea.setAttribute("id", "placement");
+
+    let board = document.createElement("div");
+    board.setAttribute("id", "board");
+
+
+    for (let col = 0; col < 7; col++) {
+        // fill placement area
+
+        let placementSquare = document.createElement("div");
+        placementSquare.setAttribute("class", "placement-square");
+        placementSquare.innerHTML = `<div class="placement-circle placement-circle-player1 circle"></div>`;
+
+        placementArea.appendChild(placementSquare);
+
+        // fill board
+        // create column
+        let column = document.createElement("div");
+        column.setAttribute("class", "column");
+        // fill columns with rows
+        for (let row = 0; row < 6; row++) {
+
+            let row = document.createElement("div");
+            row.setAttribute("class", "row");
+            row.innerHTML = `<div class="board-circle circle"></div>`;
+            column.appendChild(row);
+        }
+
+        board.appendChild(column);
+
+    }
+
+    frag.appendChild(placementArea);
+    frag.appendChild(board);
+
+    console.log(frag);
+
+    document.getElementById("game-screen").appendChild(frag);
+
+
+}
 
 /**
  * Add click events to all circles in array
@@ -18,6 +68,7 @@ function setupPlacementCircles(placementCircles) {
  */
 function placementCircleClick(placementCircle) {
     addToken(columns[placementCircle.target.index]);
+
 }
 
 /**
@@ -269,6 +320,9 @@ function storeNeighborCells(columns) {
 
 
 // ***********    MAIN    *************
+drawGameBoard();
+
+
 let placementCircles = document.getElementsByClassName("placement-circle");
 
 let isGameOver;
