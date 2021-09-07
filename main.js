@@ -1,5 +1,4 @@
 // TODO: Fix game over being called before placement token changes
-// TODO: Create html using js
 
 
 
@@ -87,10 +86,11 @@ function setupColumns(columns) {
  */
 function addToken(column) {
     if (column.availableSlots) {
+        // grab row and change color
         let targetCell = column.children[column.availableSlots - 1];
         targetCell.children[0].style.backgroundColor = isPlayer1Turn ? 'red' : 'blue';
         // Store who clicked
-        targetCell.player = isPlayer1Turn ? 1 : 2;
+        targetCell.player = isPlayer1Turn ? PLAYER1 : PLAYER2;
         column.availableSlots--;
 
         checkWin(targetCell);
@@ -103,6 +103,17 @@ function addToken(column) {
 
 }
 
+
+function changePlacementCircleColor(placementCircles) {
+    // Change visuals of placement circles 
+    let classRemove = isPlayer1Turn ? 'placement-circle-player2' : 'placement-circle-player1';
+    let classAdd = isPlayer1Turn ? 'placement-circle-player1' : 'placement-circle-player2';
+    for (let circle of placementCircles) {
+        circle.classList.add(classAdd);
+        circle.classList.remove(classRemove);
+    }
+}
+
 /**
  * 
  * @param {HTMLCollection} placementCircles 
@@ -113,14 +124,8 @@ function changeTurn(placementCircles) {
     // change text of output
     let textTurn = isPlayer1Turn ? "Player 1" : "Player 2";
     document.getElementById("output-text").textContent = `Your turn ${textTurn}!`;
+    changePlacementCircleColor(placementCircles);
 
-    // Change visuals of placement circles 
-    let classRemove = isPlayer1Turn ? 'placement-circle-player2' : 'placement-circle-player1';
-    let classAdd = isPlayer1Turn ? 'placement-circle-player1' : 'placement-circle-player2';
-    for (let circle of placementCircles) {
-        circle.classList.add(classAdd);
-        circle.classList.remove(classRemove);
-    }
 }
 
 /**
@@ -255,14 +260,15 @@ function reset() {
 
     for (let col = 0; col < 7; col++) {
         for (let row = 0; row < 6; row++) {
-            let targetCell = columns[col].children[row].children[0];
-            targetCell.style.backgroundColor = 'white';
+            let targetCell = columns[col].children[row];
+            // change inner circle color
+            targetCell.children[0].style.backgroundColor = 'white';
             targetCell.player = 0;
             columns[col].availableSlots = 6;
-            isPlayer1Turn = true;
         }
     }
-    initialize(placementCircles);
+    initialize(placementCircles, columns);
+    changePlacementCircleColor(placementCircles);
 }
 
 /**
@@ -270,6 +276,8 @@ function reset() {
  * @param {HTMLCollection} placementCircle 
  */
 function gameOver(placementCircles) {
+    isPlayer1Turn = !isPlayer1Turn;
+    changePlacementCircleColor(placementCircles);
     // drop placementCircle click event
     for (circle of placementCircles) {
         circle.removeEventListener("click", placementCircleClick);
@@ -280,6 +288,7 @@ function initialize(placementCircles, columns) {
     setupPlacementCircles(placementCircles);
     storeNeighborCells(columns);
     isGameOver = false;
+    isPlayer1Turn = true;
 }
 
 /**
@@ -321,7 +330,9 @@ function storeNeighborCells(columns) {
 
 // ***********    MAIN    *************
 drawGameBoard();
-
+const PLAYER1 = 1;
+const PLAYER2 = 2;
+const NOPLAYER = 0;
 
 let placementCircles = document.getElementsByClassName("placement-circle");
 
