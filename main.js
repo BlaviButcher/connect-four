@@ -157,7 +157,7 @@ function handleWinCheckResult(winCheckResult) {
             break;
         case 2:
             outputWinner(winCheckResult);
-            isGameOver = false;
+            isGameOver = true;
             break;
     }
 }
