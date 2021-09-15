@@ -1,12 +1,8 @@
-// TODO: Fix game over being called before placement token changes
-
-
-
+// drawGameBoard insets all the html for the actual game itself
 function drawGameBoard() {
     let frag = document.createDocumentFragment();
 
-
-
+    //placement area is where the user can click to insert token
     let placementArea = document.createElement("div");
     placementArea.setAttribute("id", "placement");
 
@@ -15,8 +11,8 @@ function drawGameBoard() {
 
 
     for (let col = 0; col < 7; col++) {
-        // fill placement area
 
+        // fill placement area with squares that will hold circles 
         let placementSquare = document.createElement("div");
         placementSquare.setAttribute("class", "placement-square");
         placementSquare.innerHTML = `<div class="placement-circle placement-circle-player1 circle"></div>`;
@@ -42,8 +38,6 @@ function drawGameBoard() {
 
     frag.appendChild(placementArea);
     frag.appendChild(board);
-
-    console.log(frag);
 
     document.getElementById("game-screen").appendChild(frag);
 
@@ -145,17 +139,14 @@ function checkWin(targetCell) {
 }
 
 /**
- * 
+ * handles the result of the algorithms checking for a win
  * @param {int} winCheckResult 
  */
 function handleWinCheckResult(winCheckResult) {
 
     switch (winCheckResult) {
-        case 1:
-            outputWinner(winCheckResult);
-            isGameOver = true;
-            break;
-        case 2:
+        case PLAYER1:
+        case PLAYER2:
             outputWinner(winCheckResult);
             isGameOver = true;
             break;
@@ -206,11 +197,6 @@ function isMainDiagnonalConnect(targetCell) {
     return -1;
 }
 
-
-function outputWinner(winner) {
-    document.getElementById("output-text").textContent = `Player ${winner} wins!`;
-}
-
 function isCrossDiagonalConnect(targetCell) {
     let player = targetCell.player;
     let originalCell = targetCell;
@@ -257,9 +243,16 @@ function isHorizontalConnect(targetCell) {
     return -1;
 }
 
+function outputWinner(winner) {
+    document.getElementById("output-text").textContent = `Player ${winner} wins!`;
+}
+
 function reset() {
     document.getElementById("output-text").textContent = "Your turn Player 1!";
 
+    // clear all circle colors
+    // clear players owning
+    // reset available slots
     for (let col = 0; col < 7; col++) {
         for (let row = 0; row < 6; row++) {
             let targetCell = columns[col].children[row];
@@ -345,6 +338,7 @@ let isPlayer1Turn;
 
 let winCheckAlgorithms = [isHorizontalConnect, isVerticalConnect, isMainDiagnonalConnect, isCrossDiagonalConnect];
 
+// cirlces where user can place tokens
 let placementCircles = document.getElementsByClassName("placement-circle");
 let columns = document.getElementsByClassName("column");
 let resetButton = document.getElementById("reset");
